@@ -1,0 +1,45 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set risks = m.of_type("RISK") %}
+Probabilità totale Pt = P1 × P2 × P3; classe P(categoria)S(gravità); accettabilità
+dalla matrice di `hammer.toml`. Il residuo è Pt × fattore di riduzione.
+
+## Tabella dei rischi (RM-TPL-05)
+
+{{ empty(risks) }}
+{% if risks %}
+| Rischio | Oggetto | Errore | Situazione pericolosa | Danno | Pt | Classe | Accettabile | Misure di controllo | Pt residua | Classe residua | Accettabile dopo le misure |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+{% for item in risks %}
+{% set e = m.risk(item) %}
+{% set controls = m.links_to(item, "mitigates") %}
+| {{ item.id }} | {{ item.fields.risk_object | cell }} | {{ item.fields.failure | cell }} | {{ item.fields.hazardous_situation | cell }} | {{ item.fields.harm | cell }} | {% if e %}{{ "%.2e" | format(e.initial.total_probability) }} | {{ e.initial.risk_class }} | {{ "sì" if e.initial.acceptable else "no" }}{% else %} | | {% endif %} | {{ controls | ids }} | {% if e and e.residual %}{{ "%.2e" | format(e.residual.total_probability) }} | {{ e.residual.risk_class }} | {{ "sì" if e.residual.acceptable else ("beneficio/rischio" if item.fields.final_acceptance == "benefit_risk" else "no") }}{% else %} | | {% endif %} |
+{% endfor %}
+
+{% endif %}
+## Dettaglio dei rischi
+
+{% for item in risks %}
+{% set controls = m.links_to(item, "mitigates") %}
+{{ block(item, 3, [
+    ("Oggetto", item.fields.risk_object),
+    ("Errore", item.fields.failure),
+    ("Causa", item.fields.cause),
+    ("Malfunzionamento del sistema", item.fields.system_misbehaviour),
+    ("Situazione pericolosa", item.fields.hazardous_situation),
+    ("Riguarda", item.fields.concerns),
+    ("Danno", item.fields.harm),
+    ("P1, P2, P3", [item.fields.p1, item.fields.p2, item.fields.p3]),
+    ("Gravità", item.fields.severity),
+    ("Fattore di riduzione", item.fields.reduction_factor),
+    ("Gravità residua", item.fields.residual_severity),
+    ("Accettazione finale", "analisi beneficio/rischio" if item.fields.final_acceptance == "benefit_risk" else None),
+]) }}
+{% if controls %}
+| Misura di controllo | Titolo | Verificata da |
+|---|---|---|
+{% for control in controls %}
+| {{ control.id }} | {{ control.title | cell }} | {{ m.links_to(control, "verifies", "TEST") | ids }} |
+{% endfor %}
+
+{% endif %}
+{% endfor %}

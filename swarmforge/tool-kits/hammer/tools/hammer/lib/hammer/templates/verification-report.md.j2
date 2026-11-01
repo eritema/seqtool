@@ -1,0 +1,44 @@
+{% from "_macros.md.j2" import empty %}
+{% set levels = [("unit", "Unità"), ("integration", "Integrazione"), ("system", "Sistema")] %}
+{% set all = m.outcomes(m.of_type("TEST")) %}
+## Sintesi dei risultati (SW-TPL-12 §3.2)
+
+| Livello | Test | Superati | Falliti | Saltati | Senza esito | Esito non sul commit |
+|---|---|---|---|---|---|---|
+{% for level, title in levels %}
+{% set t = m.tally(all | selectattr("item.fields.level", "equalto", level) | list) %}
+| {{ title }} | {{ t.total }} | {{ t.pass }} | {{ t.failed }} | {{ t.skip }} | {{ t.missing }} | {{ t.not_current }} |
+{% endfor %}
+{% set t = m.tally(all) %}
+| **Totale** | {{ t.total }} | {{ t.pass }} | {{ t.failed }} | {{ t.skip }} | {{ t.missing }} | {{ t.not_current }} |
+
+## Esiti per test
+
+{{ empty(all) }}
+{% if all %}
+| Test | Titolo | Livello | Metodo | Esito | Origine | Commit | Sul commit | Esecuzione |
+|---|---|---|---|---|---|---|---|---|
+{% for row in all %}
+| {{ row.item.id }} | {{ row.item.title | cell }} | {{ row.item.fields.level }} | {{ row.item.fields.method }} | {{ row.result or "nessuno" }} | {{ row.origin or "" }} | {{ row.commit or "" }} | {{ "" if row.result is none else ("sì" if row.current else "no") }} | {{ row.url or "" }} |
+{% endfor %}
+
+{% endif %}
+## Test falliti o senza esito (SW-TPL-12 §3.3)
+
+{% set open = all | rejectattr("result", "equalto", "pass") | list %}
+{{ empty(open, "Tutti i test hanno esito positivo.") }}
+{% for row in open %}
+- {{ row.item.id }} {{ row.item.title }}: {{ row.result or "nessun esito" }}
+{% endfor %}
+
+## Evidenze
+
+{% set evidence = m.evidence_used() %}
+{{ empty(evidence, "Nessuna evidenza.") }}
+{% if evidence %}
+| File | Origine | Commit | Creata | Esecuzione | Report (sha256) |
+|---|---|---|---|---|---|
+{% for e in evidence %}
+| {{ e._path.split("/")[-1] | cell }} | {{ e.origin }} | {{ (e.commit or "")[:7] }} | {{ e.created }} | {{ (e.ci or {}).get("url") or "" }} | {{ (e.report or {}).get("sha256") or "" }} |
+{% endfor %}
+{% endif %}

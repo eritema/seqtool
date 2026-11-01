@@ -1,0 +1,32 @@
+{% from "_macros.md.j2" import empty %}
+{% for type_, title in [("URS", "Requisiti degli stakeholder"), ("SRS", "Requisiti software")] %}
+{% set rows, summary = m.matrix(type_) %}
+## {{ title }}
+
+{{ empty(rows) }}
+{% if rows %}
+| {{ matrix_headers | join(" | ") }} |
+|{% for _ in matrix_headers %}---|{% endfor %}
+
+{% for row in rows %}
+| {{ matrix_cells(row) | map("cell") | join(" | ") }} |
+{% endfor %}
+
+passing {{ summary.passing }}, outdated {{ summary.outdated }}, not-run {{ summary["not-run"] }}, failing {{ summary.failing }}, uncovered {{ summary.uncovered }} (totale {{ summary.total }})
+
+{% endif %}
+{% endfor %}
+## Rischi e misure di controllo
+
+{% set risks = m.of_type("RISK") %}
+{{ empty(risks) }}
+{% if risks %}
+| Rischio | Classe | Misura di controllo | Verificata da |
+|---|---|---|---|
+{% for item in risks %}
+{% set e = m.risk(item) %}
+{% for control in m.links_to(item, "mitigates") or [none] %}
+| {{ item.id }} | {{ e.initial.risk_class if e else "" }} | {{ control.id if control else "nessuna" }} | {{ (m.links_to(control, "verifies", "TEST") | ids) if control else "" }} |
+{% endfor %}
+{% endfor %}
+{% endif %}

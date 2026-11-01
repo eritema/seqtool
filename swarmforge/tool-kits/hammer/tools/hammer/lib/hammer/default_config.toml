@@ -1,0 +1,159 @@
+# Configurazione di hammer per questo progetto.
+# Tipi, campi, relazioni e criteri di rischio si possono modificare o estendere.
+#
+# Campi: required = obbligatorio; values = valori ammessi; list = lista di valori;
+# kind = "number" (con min/max) o "integer"; il predefinito è testo libero.
+
+[project]
+name = "{name}"
+safety_class = "{safety_class}"   # IEC 62304: A, B o C
+
+statuses = ["draft", "review", "approved", "obsolete"]
+
+# ---------------------------------------------------------------- tipi
+
+# Requisiti degli stakeholder (Johner DI-TPL-02)
+[types.URS]
+name = "Stakeholder requirement"
+fields.stakeholder = { required = true }   # chi lo esprime: "biologo di laboratorio", "QA", …
+fields.category = { required = true, values = ["user_task", "regulatory", "market", "other"] }
+fields.source = {}                         # da dove arriva: intervista, norma e paragrafo, documento
+
+# Requisiti software (IEC 62304 §5.2.2; Johner SW-TPL-03)
+[types.SRS]
+name = "Software requirement"
+fields.category = { required = true, values = [
+    "functional", "performance", "reliability", "io", "interface", "alarm", "security",
+    "usability", "data", "installation", "operation", "network", "user_maintenance",
+    "regulatory", "constraint",
+] }
+
+# Architettura (IEC 62304 §5.3; Johner SW-TPL-04)
+[types.ARCH]
+name = "Architecture element"
+fields.kind = { required = true, values = ["component", "interface", "decision"] }
+
+# Unità e design di dettaglio (IEC 62304 §5.4, classe C)
+[types.UNIT]
+name = "Software unit"
+fields.paths = { list = true }        # file del codice che la realizzano
+fields.interfaces = {}
+
+# Software di terze parti (IEC 62304 §5.3.3, §5.3.4, §7.1.3, §8.1.2)
+[types.SOUP]
+name = "Software of unknown provenance"
+fields.package = {}                   # identità per 'hammer soup import': "pypi:pyyaml", "npm:@scope/x", "r:Biostrings"
+fields.manufacturer = { required = true }
+fields.version = { required = true }
+fields.purpose = {}
+fields.requirements = {}              # requisiti funzionali e prestazionali richiesti al SOUP
+fields.known_anomalies = {}
+fields.anomalies_evaluated = { values = ["yes", "no"] }
+
+# Rischio, analisi FMEA (ISO 14971; Johner RM-TPL-05). Probabilità, classe e
+# accettabilità si calcolano con i criteri della sezione [risk].
+[types.RISK]
+name = "Risk (FMEA)"
+fields.risk_object = {}               # componente, compito, ingresso, uscita, interfaccia
+fields.failure = {}                   # errore che avvia la sequenza
+fields.cause = {}
+fields.system_misbehaviour = {}
+fields.hazardous_situation = { required = true }
+fields.concerns = { list = true, values = ["user", "patient", "others"] }
+fields.harm = { required = true }
+fields.p1 = { required = true, kind = "number", min = 0, max = 1 }   # errore → malfunzionamento
+fields.p2 = { required = true, kind = "number", min = 0, max = 1 }   # malfunzionamento → situazione pericolosa
+fields.p3 = { required = true, kind = "number", min = 0, max = 1 }   # situazione pericolosa → danno
+fields.severity = { required = true, kind = "integer", min = 1, max = 5 }
+fields.reduction_factor = { kind = "number", min = 0, max = 1 }      # effetto delle misure di controllo
+fields.residual_severity = { kind = "integer", min = 1, max = 5 }    # se le misure cambiano la gravità
+fields.final_acceptance = { values = ["benefit_risk"] }              # residuo inaccettabile accettato dopo analisi beneficio/rischio
+
+# Casi di test (IEC 62304 §5.5–5.7; Johner SW-TPL-06). I passi vanno nel testo.
+[types.TEST]
+name = "Test case"
+fields.level = { required = true, values = ["unit", "integration", "system"] }
+fields.method = { required = true, values = ["automated", "manual"] }
+fields.objective = {}
+fields.preconditions = {}
+fields.acceptance_criteria = {}
+
+# Validazione (Johner SW-TPL-13)
+[types.VAL]
+name = "Validation activity"
+fields.method = { required = true, values = ["user_test", "review", "analysis", "demonstration"] }
+fields.acceptance_criteria = {}
+
+# Anomalie (IEC 62304 §9; Johner PD-SOP-01)
+[types.PRB]
+name = "Problem report"
+fields.problem_type = { required = true, values = ["corrective", "preventive", "adaptive"] }
+fields.scope = {}
+fields.criticality = {}               # effetto su prestazioni, sicurezza o sicurezza informatica
+fields.state = { required = true, values = ["open", "investigating", "resolved", "closed"] }
+fields.release = {}                   # rilascio in cui è stata trovata
+
+# Change request (Johner CC-FOR-01)
+[types.CHG]
+name = "Change request"
+fields.reason = {}
+fields.impact_analysis = {}
+fields.safety_impact = { values = ["yes", "no"] }
+fields.implemented_in = {}
+
+# ---------------------------------------------------------- relazioni
+# Coppie ammesse "SORGENTE->DESTINAZIONE"; "*" vale per qualsiasi tipo.
+
+[relations.derives_from]
+allowed = ["SRS->URS", "ARCH->SRS", "ARCH->ARCH", "UNIT->ARCH"]
+
+[relations.mitigates]
+allowed = ["SRS->RISK", "ARCH->RISK", "UNIT->RISK"]
+
+[relations.uses]
+allowed = ["ARCH->SOUP", "UNIT->SOUP"]
+
+[relations.verifies]
+allowed = ["TEST->SRS", "TEST->ARCH", "TEST->UNIT", "TEST->RISK"]
+
+[relations.validates]
+allowed = ["VAL->URS"]
+
+[relations.affects]
+allowed = ["PRB->*", "CHG->*"]
+
+[relations.resolves]
+allowed = ["CHG->PRB"]
+
+# ----------------------------------------------------------- copertura
+# Ogni elemento del tipo indicato deve soddisfare tutte le regole elencate.
+# Una regola è soddisfatta se l'elemento riceve la relazione da un elemento non
+# obsoleto: "verifies" da qualunque tipo, oppure
+# { rel = "...", from = "TIPO" o ["TIPO", …], where = { campo = "valore" } }:
+# 'where' filtra le sorgenti, 'when' limita la regola agli elementi coperti con
+# quei campi.
+# 'hammer check' segnala le mancanze come avvisi (errori con --strict).
+
+[coverage]
+{coverage}
+
+# --------------------------------------------------- criteri di rischio
+# Da RM-TPL-05 (Risk Policy). Le soglie delle categorie di probabilità derivano
+# dal numero di usi nella vita del prodotto: sotto 1/usi è "Unthinkable", da
+# frequent_from in su è "Frequent", le categorie intermedie sono equidistanti
+# in scala logaritmica. In alternativa si possono indicare le soglie con
+# probability_thresholds = [inizio di 2, 3, 4, 5].
+
+[risk]
+uses_over_lifetime = 312000   # prodotti × vita in anni × usi l'anno (esempio RM-TPL-05: 650 × 5 × 96)
+frequent_from = 0.1
+probability = ["Unthinkable", "Unlikely", "Rare", "Occasional", "Frequent"]   # categorie 1–5
+severity = ["Marginal", "Minor", "Moderate", "Serious", "Catastrophic"]       # gravità 1–5
+
+# Accettabilità per categoria di probabilità (P) e gravità (S1 … S5).
+[risk.acceptable]
+P5 = [true, false, false, false, false]
+P4 = [true, true,  false, false, false]
+P3 = [true, true,  true,  false, false]
+P2 = [true, true,  true,  true,  false]
+P1 = [true, true,  true,  true,  true]

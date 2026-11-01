@@ -1,0 +1,74 @@
+{% from "_macros.md.j2" import empty %}
+## Identificazione del software (SW-FOR-05 §2)
+
+| | |
+|---|---|
+| Baseline | {{ baseline.name }} |
+| Commit | {{ baseline.commit }} |
+| Creata | {{ baseline.created }} con hammer {{ baseline.hammer_version }} |
+| Elementi | {{ baseline["items"] | length }} |
+
+## Checklist (SW-FOR-05 §3)
+
+Solo i criteri verificabili sugli elementi e sulle evidenze. Gli altri
+(identificazione della versione, gestione della configurazione, build,
+distribuzione, documenti di accompagnamento, etichettatura) restano nel modulo
+del QMS.
+
+| SW-FOR-05 | Criterio | Riferimento | Esito | Elementi che non lo soddisfano |
+|---|---|---|---|---|
+{% for row in m.release_checklist() %}
+| {{ row.number }} | {{ row.criterion }} | {{ row.reference }} | {{ "Ok" if row.ok else "Deviazione" }} | {{ row.failing | ids }} |
+{% endfor %}
+
+## Anomalie note (SW-FOR-05 criterio 12)
+
+{% set problems = [] %}
+{% for p in m.of_type("PRB") if p.fields.state in ("open", "investigating") %}
+{% set _ = problems.append(p) %}
+{% endfor %}
+{{ empty(problems, "Nessuna anomalia aperta.") }}
+{% if problems %}
+| Anomalia | Titolo | Stato | Tipo | Criticità | Riguarda |
+|---|---|---|---|---|---|
+{% for p in problems %}
+| {{ p.id }} | {{ p.title | cell }} | {{ p.fields.state }} | {{ p.fields.problem_type }} | {{ p.fields.criticality | cell }} | {{ m.links_from(p, "affects") | ids }} |
+{% endfor %}
+
+{% endif %}
+## Modifiche incluse
+
+{% set changes = m.of_type("CHG", implemented_in=baseline.name) %}
+{{ empty(changes, "Nessuna richiesta di modifica con implemented_in uguale a questa baseline.") }}
+{% for c in changes %}
+- {{ c.id }} {{ c.title }}{% if m.links_from(c, "resolves") %} (risolve {{ m.links_from(c, "resolves") | ids }}){% endif %}
+
+{% endfor %}
+
+## SOUP
+
+{% set soup = m.of_type("SOUP") %}
+{{ empty(soup) }}
+{% if soup %}
+| SOUP | Nome | Versione | Anomalie valutate |
+|---|---|---|---|
+{% for s in soup %}
+| {{ s.id }} | {{ s.title | cell }} | {{ s.fields.version | cell }} | {{ s.fields.anomalies_evaluated | cell }} |
+{% endfor %}
+
+{% endif %}
+## Deviazioni registrate alla creazione della baseline
+
+{% set deviations = baseline.findings | selectattr("severity", "equalto", "error") | list %}
+{{ empty(deviations, "Nessuna.") }}
+{% for f in deviations %}
+- {{ f.item }} {{ f.code }}: {{ f.message }}
+{% endfor %}
+
+## Evidenze della baseline
+
+| File | Origine | Esecuzione | sha256 |
+|---|---|---|---|
+{% for e in baseline.evidence %}
+| {{ e.file | cell }} | {{ e.origin }} | {{ e.url or "" }} | {{ e.sha256 }} |
+{% endfor %}

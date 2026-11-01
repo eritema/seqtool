@@ -1,0 +1,15 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set changes = m.of_type("CHG") %}
+## Richieste di modifica (CC-FOR-01)
+
+{{ empty(changes) }}
+{% for item in changes %}
+{{ block(item, 3, [
+    ("Motivo", item.fields.reason),
+    ("Analisi d'impatto", item.fields.impact_analysis),
+    ("Impatto sulla sicurezza", item.fields.safety_impact),
+    ("Implementata in", item.fields.implemented_in),
+    ("Risolve", m.links_from(item, "resolves") | ids),
+    ("Riguarda", m.links_from(item, "affects") | ids),
+]) }}
+{% endfor %}

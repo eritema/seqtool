@@ -1,0 +1,110 @@
+{
+  "components": {
+    "Jinja2": {
+      "licenses": [
+        "Jinja2-LICENSE.txt"
+      ],
+      "version": "3.1.6"
+    },
+    "MarkupSafe": {
+      "licenses": [
+        "MarkupSafe-LICENSE.txt"
+      ],
+      "version": "3.0.4"
+    },
+    "PyYAML": {
+      "licenses": [
+        "PyYAML-LICENSE"
+      ],
+      "version": "6.0.3"
+    },
+    "hammer-cq": {
+      "licenses": [],
+      "version": "0.1.0"
+    }
+  },
+  "files": {
+    "swarmforge-tools-v1": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "tools/hammer/lib/hammer/__init__.py": "4390f7f7431fd797d0b54ae792d870cde7103b3ac6f1ab66374d427a9a56f5e1",
+    "tools/hammer/lib/hammer/audit.py": "592cd697d037f44e8564f8c511a9d73e8307982d49bac060113b374c8c11db41",
+    "tools/hammer/lib/hammer/baseline.py": "aeaede736e5c824d8358f54c55278bac316727c01f5a6b17e95b4c5afa25f9d0",
+    "tools/hammer/lib/hammer/checks.py": "b44cbd663da2ad9d0fdc18b9df31abe78551841fd9db318d2213655bbcebf3fc",
+    "tools/hammer/lib/hammer/ci.py": "b58da236005b8c144ca99599aa6e76abf3132fa4180f563a2062a1d86194b556",
+    "tools/hammer/lib/hammer/cli.py": "bf5ba1bec607b54d70dd0fa43152d3022c7468ee55a653c1bb166ebcaacca89f",
+    "tools/hammer/lib/hammer/config.py": "4f78b4f284321517afed3633b93a1cbcc65a3d7a039583255667a2aa44ebc30a",
+    "tools/hammer/lib/hammer/default_config.toml": "c43951ab50c375de8ab1b35927448e51d74af96dfb558b479ab52c798d32f039",
+    "tools/hammer/lib/hammer/errors.py": "0857f85a813e1a9b28fc41b8304d6b4b70aaf31cab123ad25f98402fe3dc1b9a",
+    "tools/hammer/lib/hammer/evidence.py": "67ec75c779c6b78dc5902eaccf2aec4eb3835f6ebb144c165b16c2fb011b06a4",
+    "tools/hammer/lib/hammer/export.py": "b5ef04726f2fe75dccea2d214d644f7372db959594424f440e1ce946a4e0b042",
+    "tools/hammer/lib/hammer/index.py": "a37a3f6299b525aaed8b2e2953473275339a378967771a3b2ddfb085b8e50b65",
+    "tools/hammer/lib/hammer/items.py": "a58428942bc717bbc5499e235adbf1dbae85c6be345c26d0dc6ed9330003a96f",
+    "tools/hammer/lib/hammer/kit.py": "7825befdcdc2e994ab0329e88d79dcf753c331a5893622040adc209898fa98df",
+    "tools/hammer/lib/hammer/matrix.py": "2bb8ec5b7a0129b0208b4947425053e3f92ae0fde8db02a7ffc77b89fd71f672",
+    "tools/hammer/lib/hammer/project.py": "c0344880e5925270ece8dd273b15664bb6df1f297b5a48cb310eaa8e3239ca07",
+    "tools/hammer/lib/hammer/risk.py": "6c26e6e20ac5b39892e660cf8134e9788b052977622571158eebe3431cd7b725",
+    "tools/hammer/lib/hammer/soup.py": "a9e93980d3d4896f6d77a698d66931427bd190ec207d0bc31773b5e16f6749f6",
+    "tools/hammer/lib/hammer/templates/_macros.md.j2": "5deb703f3ec7ebecd8df72a449e6d23252eedf04bacfcefba164e372077de435",
+    "tools/hammer/lib/hammer/templates/architecture.md.j2": "9ecc96c31705ce0cdcb544f92a62170d90dcd9ea5a5af7e934e9360de39aecef",
+    "tools/hammer/lib/hammer/templates/changes.md.j2": "adfc0699d416bf2602995efcc41bcee7bc1c1b3dbfa36c2a64d9c628d12a325f",
+    "tools/hammer/lib/hammer/templates/full-report.md.j2": "74ef4d137cb6827faca7168a70e63d6d853d5d0844ff4860b116e02859a805a4",
+    "tools/hammer/lib/hammer/templates/release.md.j2": "17e0073334e14c1f03d455231a1a46f6c1aed8fd983682ce57196e58e39cc0cb",
+    "tools/hammer/lib/hammer/templates/risk.md.j2": "b24178eb56e4873412bcdae33c7f4d87eb06227e464bdc17f772eeaf022bc797",
+    "tools/hammer/lib/hammer/templates/srs.md.j2": "616d1dfb3c3a6be2308ab4d4136e241d348b15acecd8d0b3305f814331d83fe0",
+    "tools/hammer/lib/hammer/templates/test-spec.md.j2": "494bee084cf158a18e38ae7c6c40d62b789120fd3e5d8be9c78510b646ee071a",
+    "tools/hammer/lib/hammer/templates/traceability.md.j2": "ff1f6a526c7ddd40d29348363847f4ed2fd078b464d49ccdccd15214d28ecd10",
+    "tools/hammer/lib/hammer/templates/urs.md.j2": "98c7ae906af28e3b367b3a2936e87c761e52fb5dace38170ec51dd63638089ec",
+    "tools/hammer/lib/hammer/templates/validation-report.md.j2": "76822db9b0fe312d74fb6b0f3a900fd84b2de07c7b6d49285837a781d810253b",
+    "tools/hammer/lib/hammer/templates/verification-report.md.j2": "42677891d0ed64e3d71dcd14b0354d23e3df01df40bfbfa55c27cdbac642e5d3",
+    "tools/hammer/lib/jinja2/__init__.py": "c717a93bd8bb0c7b2a910ae004476e2ed7e8cf6402b93ebf81b2f85d237585b5",
+    "tools/hammer/lib/jinja2/_identifier.py": "ff361cb4d2b346a964fe6bab4cd973ae3bb514524bed56bf223aaa77b8a2da55",
+    "tools/hammer/lib/jinja2/async_utils.py": "bcaf8f76cba8ace3275929c4913de25094489139d880ed93e8c9c6c43807239a",
+    "tools/hammer/lib/jinja2/bccache.py": "821d2ab3daee9675e8d0f857e634c9cb6507cc8f3016743ade8fefc3b9e1cd18",
+    "tools/hammer/lib/jinja2/compiler.py": "f51a42425e57f3c0479652623ec1cf876f791e1d2e029bf0149350baeb542de3",
+    "tools/hammer/lib/jinja2/constants.py": "18ca05c9d045fe476969128fa0ce5c97932f8aab9544b57266d7e9e7ed7a8e0d",
+    "tools/hammer/lib/jinja2/debug.py": "0a71ea0831ddf81546bed8bff19b13a259d7361037102b18fba9ffda9c14f07c",
+    "tools/hammer/lib/jinja2/defaults.py": "6e805c4b0efc87e969db461b697489b2a900236b8dfe60ff4ed0b27697aae705",
+    "tools/hammer/lib/jinja2/environment.py": "f6786b3fb0a1f8d6c65f4d30bf2af8cb2fae84d1ead8e09ceb48201ab9e2fdf9",
+    "tools/hammer/lib/jinja2/exceptions.py": "8a81de1eb5b009635a5d7d629c798755b96f73885a3bb017b230a9dc67d6bf1d",
+    "tools/hammer/lib/jinja2/ext.py": "e4f1797877e1f265c02315c71d1076c576d7a218bca44de71d23b16baeae4bb1",
+    "tools/hammer/lib/jinja2/filters.py": "3d0fc481df67f634a0b671906321782b98f69d8c21508ba584f9f28a691dafe9",
+    "tools/hammer/lib/jinja2/idtracking.py": "fa5979948a7bde930bdc4ad46222098fbb5d996c5c1ff2250efdf203f862658a",
+    "tools/hammer/lib/jinja2/lexer.py": "2d88988a8e9bafe4dea7d9cf72ea565ec3c4b6396ec37a75994fa534155151f9",
+    "tools/hammer/lib/jinja2/loaders.py": "c08ae7c63bdc6ea8795705b6f0d4a47e8b620eaf2a342c4839215b1948922c1e",
+    "tools/hammer/lib/jinja2/meta.py": "3930cf91a16f5361e0bf1fba6a4cfbd79e05f012166919af25c045bf0a291f0c",
+    "tools/hammer/lib/jinja2/nativetypes.py": "ec620600b54981dc8bf34a1925d4146947f04ade6ada549265b5edd1d35ffcce",
+    "tools/hammer/lib/jinja2/nodes.py": "9b50eecdcafaaa1648f0943a57226050d8a78c07f96d0ce28d29839ccb2f531f",
+    "tools/hammer/lib/jinja2/optimizer.py": "ac99c246543ba59b04126321b100e00bfa4ac831f13f94cf4bacd53c6b2072ef",
+    "tools/hammer/lib/jinja2/parser.py": "94b385cb7b0498773921a1074621f5b1056721dda6a14433872789653b5d637d",
+    "tools/hammer/lib/jinja2/runtime.py": "80393e1af76b8895ea82c19b1e0adc2933f4629eb33d7ce1ceb2290851f78c05",
+    "tools/hammer/lib/jinja2/sandbox.py": "330d9a8ad958d88f256bb15885c5f6606f41b5461c2e70f41a1ddddbd7035ab6",
+    "tools/hammer/lib/jinja2/tests.py": "54bb018551675a0f8fc52073d4c8519cd5a03f5a2f5e4de778ed452d031e0bd4",
+    "tools/hammer/lib/jinja2/utils.py": "ad1a77a3d7bb64a4b87f2ad645b10bc8b729b8655315c9e8a1a39ad6ac7f1489",
+    "tools/hammer/lib/jinja2/visitor.py": "11c9cbd4f2307ffe1154238cc6c44db91f005c76d2d6a7c074c384da780a273e",
+    "tools/hammer/lib/markupsafe/__init__.py": "1f512743b0ba6e96c1d7a9450e425889e9978eb3d2d15e72dd57c8c47f518686",
+    "tools/hammer/lib/markupsafe/_native.py": "8522ecf099b3e5aa9acae7a780927791d4f93f0369056a4aae6412762a67742f",
+    "tools/hammer/lib/yaml/__init__.py": "b19dfcc333d6a75dfd73073901164507252f271b41d3b5f7d85510033a0547a7",
+    "tools/hammer/lib/yaml/composer.py": "fcaa37d16afa783594794a5ab94193dcb720f503c19ce3d59539c8311189f453",
+    "tools/hammer/lib/yaml/constructor.py": "90d8247da78b524c10618fd0e857f54f3d97570fe91b5c5513d024ef3faf88b0",
+    "tools/hammer/lib/yaml/cyaml.py": "e99ac01bd7c062f7557b614aff0d21997a06ed962ca185306a91bc0a20bbd87d",
+    "tools/hammer/lib/yaml/dumper.py": "3cb72d66563064ba7b5e679477046ebf89d8399d940670c8532f3e94a7cb17ea",
+    "tools/hammer/lib/yaml/emitter.py": "8e086d694ede170837d5b1b407b45979aff6f40762f422a65eafd08e04290a44",
+    "tools/hammer/lib/yaml/error.py": "021f73fada072546c4f63f8cf18a7181244ce4280b09cc15cc980b2d1176171a",
+    "tools/hammer/lib/yaml/events.py": "e74fd392c810884e2ea7e94aa3f57e9c1cbeb402319083d0c58e6a0e1282787c",
+    "tools/hammer/lib/yaml/loader.py": "5156becc8aa6905482218abf3e04869b835226db4763645fff3438fdbd5f1cdd",
+    "tools/hammer/lib/yaml/nodes.py": "80f28d8fca4a09d87677882bde021820d9cf39a3b11a12405226211919cf13ce",
+    "tools/hammer/lib/yaml/parser.py": "8a55a9e6fbe0a07146cef3990c8b45a068c3e83e369e1959ad9ca30306b4a09a",
+    "tools/hammer/lib/yaml/reader.py": "d1d9b38ab3a20c6e17a38d519ee412ecaf6b918df18c78956ac7c330d4ea08dc",
+    "tools/hammer/lib/yaml/representer.py": "22e58ff9c016f6c1ca1274b4802a926bcf78935060e1c813c5a0f021c6d143e6",
+    "tools/hammer/lib/yaml/resolver.py": "f4bf9561f9b89961f1503d558385fbae30d12bfed565de9bf76c33abb63620a6",
+    "tools/hammer/lib/yaml/scanner.py": "60433788b652690c17710460da5d91e0c753d3318fd85f5e1e42862a71f25906",
+    "tools/hammer/lib/yaml/serializer.py": "0a1b85826854d35863e31808f0668abfabdf33606e8f06bd8bb7761401e3edc0",
+    "tools/hammer/lib/yaml/tokens.py": "953408cd2570f0c83dc2fe39f7e4e388e41eeb05738aa69196a5f6ffcf6ba79e",
+    "tools/hammer/licenses/Jinja2-LICENSE.txt": "3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b",
+    "tools/hammer/licenses/MarkupSafe-LICENSE.txt": "489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea",
+    "tools/hammer/licenses/PyYAML-LICENSE": "8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4",
+    "tools/hammer/main.py": "073b48a96365f14183e97315e6215b8c4b6f688a626a53702cee093e64cd601d",
+    "tools/hammer/run": "49dbfb2f66856eb504040b483944f294eb850ae4394f2f32d2082b796bc51ebc"
+  },
+  "hammer_version": "0.1.0",
+  "requires": "python3 >= 3.11"
+}

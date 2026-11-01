@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+tool_dir="$(cd -- "$(dirname -- "$0")" && pwd)"
+source "$tool_dir/runtime.sh"
+reuse=; configured=
+for argument in "$@"; do
+  case "$argument" in
+    --use-existing-coverage) reuse=1 ;;
+    --coverage-command) configured=1 ;;
+  esac
+done
+if [ -z "$reuse$configured" ] && [ "${1:-}" != --help ]; then
+  echo 'LOCAL_COVERAGE_REQUIRED: pass --coverage-command with a local runner, or --use-existing-coverage.' >&2
+  exit 2
+fi
+exec bb --config "$tool_dir/empty.edn" --classpath "$analysis_cp" -m crap4clj.core "$@"

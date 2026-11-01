@@ -1,0 +1,36 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set labels = {
+    "functional": "Funzionalità e capacità", "performance": "Prestazioni", "reliability": "Affidabilità",
+    "io": "Ingressi e uscite", "interface": "Interfacce con altri sistemi", "alarm": "Allarmi, avvisi e messaggi",
+    "security": "Sicurezza informatica", "usability": "Interfaccia utente", "data": "Dati e database",
+    "installation": "Installazione e accettazione", "operation": "Funzionamento e manutenzione",
+    "network": "Rete", "user_maintenance": "Manutenzione da parte dell'utente",
+    "regulatory": "Requisiti normativi", "constraint": "Vincoli",
+} %}
+{% set srs = m.of_type("SRS") %}
+Requisiti raggruppati per categoria secondo IEC 62304 §5.2.2.
+
+{{ empty(srs) }}
+{% for category, title in labels.items() %}
+{% set selected = srs | selectattr("fields.category", "equalto", category) | list %}
+{% if selected %}
+## {{ title }}
+
+{% for item in selected %}
+{{ block(item, 3, [
+    ("Deriva da", m.links_from(item, "derives_from") | ids),
+    ("Misura di controllo per", m.links_from(item, "mitigates") | ids),
+    ("Realizzato da", m.links_to(item, "derives_from", "ARCH") | ids),
+    ("Verificato da", m.links_to(item, "verifies") | ids),
+]) }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% set other = srs | rejectattr("fields.category", "in", labels.keys() | list) | list %}
+{% if other %}
+## Altre categorie
+
+{% for item in other %}
+{{ block(item, 3, [("Categoria", item.fields.category), ("Deriva da", m.links_from(item, "derives_from") | ids)]) }}
+{% endfor %}
+{% endif %}

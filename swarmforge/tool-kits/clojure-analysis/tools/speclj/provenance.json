@@ -1,0 +1,39 @@
+{
+  "sources": {
+    "crap4clj": {
+      "url": "https://github.com/unclebob/crap4clj.git",
+      "commit": "e068673a852a8142323ac680fa3366de65bc2227"
+    },
+    "clj-mutate": {
+      "url": "https://github.com/unclebob/clj-mutate.git",
+      "commit": "cea397da5b10b27372e36b6764728c952058e802"
+    },
+    "cloverage": {
+      "url": "https://github.com/cloverage/cloverage.git",
+      "commit": "61e3cac426e9907a9dd01c37597f85c71a57ff90"
+    }
+  },
+  "dependencies": {
+    "riddley-0.2.2.jar": {
+      "coordinate": "riddley/riddley/0.2.2",
+      "sha256": "c38dbfa82e0decfd406185db0f881c383705f1fc1ed6b011a61c78c3d016b679"
+    },
+    "slingshot-0.12.2.jar": {
+      "coordinate": "slingshot/slingshot/0.12.2",
+      "sha256": "a68ac22bf2ea3cd54ce34db70fd69844d631ef549f6450c278c30e6f79df63f3"
+    },
+    "speclj-3.13.0.jar": {
+      "coordinate": "speclj/speclj/3.13.0",
+      "sha256": "d66528eba8e8dc5925befa32f8999be45fde116bd8960c1bcc9676c2bb95427d"
+    },
+    "versioneer-0.2.0.jar": {
+      "coordinate": "trptcolin/versioneer/0.2.0",
+      "sha256": "d0bdc80617439d92afd76e6fbd9284ac6edbf74d78c38f9b18f183c57f378e09"
+    },
+    "tools.namespace-1.5.0.jar": {
+      "coordinate": "org/clojure/tools.namespace/1.5.0",
+      "sha256": "1eebf07aeb241aee9a0c197bf723205b0bade132d96069f6600bda4ae2e1d094"
+    }
+  },
+  "runtime": "Babashka 1.13.225 or newer; built-in Clojure, rewrite-clj, tools.reader, tools.cli, tools.logging, java.classpath, data.xml and data.json"
+}

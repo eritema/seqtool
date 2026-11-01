@@ -1,0 +1,23 @@
+{# Macro comuni ai documenti. #}
+{% macro details(rows) %}
+| | |
+|---|---|
+{% for label, value in rows if value %}
+| {{ label }} | {{ value | cell }} |
+{% endfor %}
+{% endmacro %}
+
+{% macro block(item, level, rows) %}
+{{ "#" * level }} {{ item.id }} {{ item.title }}
+
+{{ details([("Stato", item.status)] + rows) }}
+{% if item.body %}
+
+{{ item.body | demote(level) }}
+{% endif %}
+
+{% endmacro %}
+
+{% macro empty(items, text="Nessun elemento.") %}{% if not items %}_{{ text }}_
+
+{% endif %}{% endmacro %}

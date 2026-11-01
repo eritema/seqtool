@@ -1,0 +1,37 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set urs = m.of_type("URS") %}
+{% macro requirement(item) %}{{ block(item, 4, [
+    ("Stakeholder", item.fields.stakeholder),
+    ("Fonte", item.fields.source),
+    ("Requisiti software derivati", m.links_to(item, "derives_from", "SRS") | ids),
+    ("Validato da", m.links_to(item, "validates") | ids),
+]) }}{% endmacro %}
+## Stakeholder (DI-TPL-02 §2)
+
+{{ empty(urs) }}
+{% for group in urs | map(attribute="fields.stakeholder") | unique | sort %}
+- {{ group }} (requisiti: {{ urs | selectattr("fields.stakeholder", "equalto", group) | list | length }})
+{% endfor %}
+
+## Requisiti degli utenti e compiti principali (DI-TPL-02 §3)
+
+{% set tasks = urs | selectattr("fields.category", "equalto", "user_task") | list %}
+{{ empty(tasks) }}
+{% for group in tasks | map(attribute="fields.stakeholder") | unique | sort %}
+### {{ group }}
+
+{% for item in tasks if item.fields.stakeholder == group %}
+{{ requirement(item) }}
+{% endfor %}
+{% endfor %}
+## Altri requisiti degli stakeholder (DI-TPL-02 §4)
+
+{% for category, title in [("regulatory", "Requisiti normativi (§4.1)"), ("market", "Requisiti di mercato (§4.2)"), ("other", "Altri requisiti (§4.3)")] %}
+### {{ title }}
+
+{% set selected = urs | selectattr("fields.category", "equalto", category) | list %}
+{{ empty(selected) }}
+{% for item in selected %}
+{{ requirement(item) }}
+{% endfor %}
+{% endfor %}

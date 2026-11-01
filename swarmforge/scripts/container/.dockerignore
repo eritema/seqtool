@@ -1,0 +1,9 @@
+*
+!worker.Dockerfile
+!proxy.Dockerfile
+!entrypoint.sh
+!isolation_probe.bb
+!git_trust.bb
+!codex_auth.bb
+!squid.conf
+!lmstudio_gateway.cjs

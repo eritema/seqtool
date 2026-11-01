@@ -1,0 +1,42 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set vals = m.outcomes(m.of_type("VAL")) %}
+## Sintesi dei risultati di validazione (SW-TPL-14 §3.2)
+
+{{ empty(vals) }}
+{% if vals %}
+| Attività | Titolo | Metodo | Requisiti validati | Esito | Commit |
+|---|---|---|---|---|---|
+{% for row in vals %}
+| {{ row.item.id }} | {{ row.item.title | cell }} | {{ row.item.fields.method }} | {{ m.links_from(row.item, "validates") | ids }} | {{ row.result or "nessuno" }} | {{ row.commit or "" }} |
+{% endfor %}
+
+{% endif %}
+## Validazioni fallite o senza esito (SW-TPL-14 §3.3)
+
+{% set open = vals | rejectattr("result", "equalto", "pass") | list %}
+{{ empty(open, "Tutte le validazioni hanno esito positivo.") }}
+{% for row in open %}
+- {{ row.item.id }} {{ row.item.title }}: {{ row.result or "nessun esito" }}
+{% endfor %}
+
+## Requisiti degli stakeholder non validati
+
+{% set missing = [] %}
+{% for item in m.of_type("URS") if not m.links_to(item, "validates") %}
+{% set _ = missing.append(item) %}
+{% endfor %}
+{{ empty(missing, "Ogni requisito degli stakeholder ha un'attività di validazione.") }}
+{% for item in missing %}
+- {{ item.id }} {{ item.title }}
+{% endfor %}
+
+## Attività di validazione
+
+{% for row in vals %}
+{{ block(row.item, 3, [
+    ("Metodo", row.item.fields.method),
+    ("Valida", m.links_from(row.item, "validates") | ids),
+    ("Criteri di accettazione", row.item.fields.acceptance_criteria),
+    ("Esito", row.result),
+]) }}
+{% endfor %}

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+tool_dir="$(cd -- "$(dirname -- "$0")" && pwd)"
+source "$tool_dir/runtime.sh"
+scan=; configured=
+for argument in "$@"; do
+  case "$argument" in
+    --scan|--update-manifest|--help) scan=1 ;;
+    --test-command) configured=1 ;;
+  esac
+done
+if [ -z "$scan$configured" ]; then
+  if [ ! -d spec ]; then
+    echo 'LOCAL_TEST_COMMAND_REQUIRED: pass --test-command, --coverage-command and --test-roots for this project.' >&2
+    exit 2
+  fi
+  set -- "$@" --test-command 'speclj -c spec --tag ~no-mutate'     --coverage-command 'cloverage --speclj -c spec --tag ~no-mutate -- -p src -s spec --lcov' --test-roots spec
+fi
+exec bb --config "$tool_dir/empty.edn" --classpath "$analysis_cp" -m clj-mutate.core "$@"

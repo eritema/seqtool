@@ -1,0 +1,32 @@
+# seqtools: libreria per sequenze DNA, two-pack
+
+## Scopo e confini
+- Libreria JavaScript in moduli .mjs sotto src/. Solo Node già presente: nessuna
+  dipendenza esterna, installazione o download.
+- Le sequenze DNA ammettono A, C, G, T, N, maiuscole o minuscole. Una funzione
+  che riceve dati non validi lancia un errore che indica il problema; non
+  restituisce mai un risultato parziale o "ripulito".
+- Non modificare script SwarmForge, configurazione dei modelli, prompt dei ruoli.
+
+## Verifiche
+- Test in test/*.test.mjs con node:test. TDD: test che fallisce, codice, refactoring.
+- Comando dei test, con report JUnit:
+  mkdir -p reports && node --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/junit.xml test/*.test.mjs
+- Esentati: CRAP, coverage, mutation, Gherkin, property testing. Restano review, TDD, audit.
+
+## Documentazione regolatoria (hammer)
+- Requisiti, architettura, rischi e test sono elementi in cq/items/, gestiti
+  con .swarmforge/bin/hammer. Gli ID li assegna `hammer new`: non inventarli.
+  Non modificare cq/hammer.toml, cq/baselines/, cq/evidence/.
+- Il task indica l'URS da realizzare. Chi realizza o cambia un requisito
+  aggiorna i suoi elementi: SRS derivate dall'URS, ARCH/UNIT, TEST collegati con
+  `hammer link`. Riusare gli elementi esistenti quando il codice è condiviso.
+- Ogni misura di controllo di un RISK (mitigates) ha un TEST che la verifica.
+- I test automatici portano l'ID del loro TEST nel nome: test('… [TEST-0007]', …).
+- All'inizio del task annotare `git rev-parse HEAD` come commit base.
+- Prima dell'handoff, dopo il commit: eseguire i test, `hammer evidence import
+  reports/junit.xml --format junit`, `hammer check`, poi
+  `hammer audit --base BASE --update ESITO`. Findings non vuoti vanno corretti.
+- Link sospetti: rivedere l'elemento collegato e solo dopo `hammer review ID`.
+- Baseline, export di rilascio ed evidenze CI sono dell'operatore.
+

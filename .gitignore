@@ -1,0 +1,5 @@
+.cq-index.sqlite
+.cq-evidence/
+reports/
+.swarmforge/
+.worktrees/

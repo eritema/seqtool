@@ -1,0 +1,38 @@
+{% from "_macros.md.j2" import empty %}
+## Identificazione (SW-TPL-10 §1c)
+
+| | |
+|---|---|
+| Progetto | {{ m.config.project_name }} |
+| Baseline | {{ baseline.name }} |
+| Commit | {{ baseline.commit }} |
+
+## Attività di verifica e validazione (SW-TPL-10 §2)
+
+| Attività | Elementi | Superati | Falliti | Saltati | Senza esito |
+|---|---|---|---|---|---|
+{% for title, items in [
+    ("Test di unità", m.of_type("TEST", level="unit")),
+    ("Test di integrazione", m.of_type("TEST", level="integration")),
+    ("Test di sistema automatici", m.of_type("TEST", level="system", method="automated")),
+    ("Test di sistema manuali", m.of_type("TEST", level="system", method="manual")),
+    ("Validazione", m.of_type("VAL")),
+] %}
+{% set t = m.tally(m.outcomes(items)) %}
+| {{ title }} | {{ t.total }} | {{ t.pass }} | {{ t.failed }} | {{ t.skip }} | {{ t.missing }} |
+{% endfor %}
+
+Revisioni del codice e analisi statica non sono gestite da hammer: vanno
+riportate dagli strumenti che le eseguono.
+
+## Tracciabilità
+
+{% for type_, title in [("URS", "Requisiti degli stakeholder"), ("SRS", "Requisiti software")] %}
+{% set rows, summary = m.matrix(type_) %}
+- {{ title }}: {{ summary.passing }} su {{ summary.total }} coperti da esiti positivi sul commit ({{ summary.failing }} con esiti negativi, {{ summary["not-run"] + summary.outdated }} senza esito valido, {{ summary.uncovered }} non coperti).
+{% endfor %}
+
+## Esito dei criteri di rilascio
+
+{% set checklist = m.release_checklist() %}
+{{ checklist | selectattr("ok") | list | length }} criteri su {{ checklist | length }} soddisfatti; il dettaglio è nel documento di rilascio (SW-FOR-05).

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RUNTIME="$SCRIPT_DIR/swarmforge/scripts/swarmforge.sh"
+if [[ ! -f "$RUNTIME" ]]; then
+  echo "SwarmForge: missing local runtime: $RUNTIME" >&2
+  echo "Restore the runtime with get-swarm-forge before starting SwarmForge." >&2
+  exit 1
+fi
+exec "$RUNTIME" "$@"

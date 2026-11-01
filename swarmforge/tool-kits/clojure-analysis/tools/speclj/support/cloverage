@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+tool_dir="$(cd -- "$(dirname -- "$0")/.." && pwd)"
+source "$tool_dir/runtime.sh"
+if [ "${1:-}" = --speclj ]; then
+  exec bb --config "$tool_dir/empty.edn" --classpath "$analysis_cp" -m offline.coverage "$@"
+fi
+exec bb --config "$tool_dir/empty.edn" --classpath "$analysis_cp" -m offline.coverage --lcov "$@"

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+tool_dir="$(cd -- "$(dirname -- "$0")/.." && pwd)"
+source "$tool_dir/runtime.sh"
+exec bb --config "$tool_dir/empty.edn" --classpath "$analysis_cp" -m speclj.main "$@"

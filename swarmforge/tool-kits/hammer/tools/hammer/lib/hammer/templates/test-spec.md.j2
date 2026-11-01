@@ -1,0 +1,24 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set tests = m.of_type("TEST", level="system") %}
+## Elenco dei test di sistema (SW-TPL-06)
+
+{{ empty(tests) }}
+{% if tests %}
+| Test | Titolo | Metodo | Verifica |
+|---|---|---|---|
+{% for item in tests %}
+| {{ item.id }} | {{ item.title | cell }} | {{ item.fields.method }} | {{ m.links_from(item, "verifies") | ids }} |
+{% endfor %}
+
+{% endif %}
+## Casi di test
+
+{% for item in tests %}
+{{ block(item, 3, [
+    ("Metodo", item.fields.method),
+    ("Verifica", m.links_from(item, "verifies") | ids),
+    ("Obiettivo", item.fields.objective),
+    ("Precondizioni", item.fields.preconditions),
+    ("Criteri di accettazione", item.fields.acceptance_criteria),
+]) }}
+{% endfor %}

@@ -1,0 +1,219 @@
+(ns cloverage.args
+  (:refer-clojure :exclude [boolean?])
+  (:require [clojure.tools.cli :as cli]
+            [clojure.set :as set]
+            [clojure.string :as str])
+  (:import (java.util.regex Pattern)
+           (clojure.lang ExceptionInfo)))
+
+(defn- boolean? [x]
+  (instance? Boolean x))
+
+(defn- regexes-or-strings?
+  [coll]
+  (every? #(or (string? %)
+               (instance? Pattern %)) coll))
+
+(defn- symbols?
+  [coll]
+  (every? symbol? coll))
+
+(def valid
+  {:text?                 boolean?
+   :html?                 boolean?
+   :raw?                  boolean?
+   :emma-xml?             boolean?
+   :junit?                boolean?
+   :lcov?                 boolean?
+   :codecov?              boolean?
+   :coveralls?            boolean?
+   :summary?              boolean?
+   :colorize?             boolean?
+   :fail-threshold        integer?
+   :line-fail-threshold   integer?
+   :form-fail-threshold   integer?
+   :low-watermark         integer?
+   :high-watermark        integer?
+   :debug?                boolean?
+   :nop?                  boolean?
+   :extra-test-ns         regexes-or-strings?
+   :help?                 boolean?
+   :ns-regex              regexes-or-strings?
+   :test-ns-regex         regexes-or-strings?
+   :ns-exclude-regex      regexes-or-strings?
+   :exclude-call          symbols?
+   :src-ns-path           regexes-or-strings?
+   :runner                keyword?
+   :runner-opts           map?
+   :test-ns-path          regexes-or-strings?
+   :custom-report         symbol?})
+
+(defn- fn-sym [^Object f]
+  (let [[_ f-ns f-n] (re-matches #"(.*)\$(.*?)(__[0-9]+)?" (.getName (class f)))]
+    ;; check for anonymous function and SCI internal fns
+    (when (and (not= "fn" f-n)
+               (not= "sci.impl.fns$fun" f-ns))
+      (symbol (clojure.lang.Compiler/demunge f-ns) (clojure.lang.Compiler/demunge f-n)))))
+
+(defn validate [[k v :as pair]]
+  (let [f (get valid k (constantly true))]
+    (if (f v)
+      pair
+      (let [message (str "Invalid value: " k ", " v " (should satisfy: " (fn-sym f) ")")]
+        (println message)
+        (ex-info message {:k k :v v :validation-fn (fn-sym f)})))))
+
+(defn validate! [project-settings]
+  (when-let [validation-errors (->> project-settings
+                                    (mapv validate) ;; mapv for running all validations. Printing multiple results is friendlier than just one
+                                    (filterv (partial instance? ExceptionInfo))
+                                    (not-empty))]
+    (throw (ex-info "Invalid project settings"
+                    {:invalid-pairs (mapv ex-data validation-errors)}))))
+
+(defn- parse-sym-str [s]
+  (->> (str/split s #"/")
+       (take 2)
+       (apply symbol)))
+
+(defn- parse-kw-str [s]
+  (let [s (name s)
+        s (if (and s (.startsWith s ":")) (subs s 1) s)]
+    (keyword s)))
+
+(def boolean-flags
+  (letfn [(add-? [k]
+            [k (keyword (str (name k) \?))])]
+    (->> [:text :html :raw :emma-xml :junit :lcov :codecov :coveralls :summary :colorize :debug :nop :help]
+         (map add-?)
+         (into {}))))
+
+(defn- overwrite
+  "For each key-value pair in project settings, overwrite the value in opts"
+  [opts project-settings]
+  (reduce (fn [o [k v]]
+            (if (coll? v)
+              (update o k concat v)
+              (assoc o k v)))
+          opts
+          project-settings))
+
+(defn- fix-opts
+  "Clean the parsed command-line options.
+  Rename boolean flags then merge in any project settings."
+  [[opts add-nses help] project-settings]
+  (let [->regexes (partial map re-pattern)
+        ->symbols (partial map symbol)
+        opts      (-> opts
+                      (update :ns-regex ->regexes)
+                      (update :test-ns-regex ->regexes)
+                      (update :ns-exclude-regex ->regexes)
+                      (update :exclude-call ->symbols)
+                      (set/rename-keys boolean-flags)
+                      (overwrite project-settings)
+                      (update :test-selectors #(into {} %)))]
+    [opts add-nses help]))
+
+;; This is a defn for avoiding state across test runs
+(defn arguments []
+  [["-o" "--output OUTPUT" "Output directory." :default "target/coverage"]
+   [nil "--[no-]text"
+    "Produce a text report." :default false]
+   [nil "--[no-]html"
+    "Produce an HTML report." :default true]
+   [nil "--[no-]emma-xml"
+    "Produce an EMMA XML report. [emma.sourceforge.net]" :default false]
+   [nil "--[no-]lcov"
+    "Produce a lcov/gcov report." :default false]
+   [nil "--[no-]codecov"
+    "Generate a JSON report for Codecov.io" :default false]
+   [nil "--[no-]coveralls"
+    "Send a JSON report to Coveralls if on a CI server" :default false]
+   [nil "--[no-]junit"
+    "Output test results as junit xml file. Supported in :clojure.test runner" :default false]
+   [nil "--[no-]raw"
+    "Output raw coverage data (for debugging)." :default false]
+   [nil "--[no-]summary"
+    "Prints a summary" :default true]
+   [nil "--[no-]colorize"
+    "Adds ANSI color to the summary" :default true]
+   [nil "--fail-threshold THRESHOLD"
+    "Sets the percentage threshold for both line and form coverage at which cloverage will abort the build. Default: 0%"
+    :default 0
+    :parse-fn #(Integer/parseInt %)]
+   [nil "--line-fail-threshold THRESHOLD"
+    "Sets the percentage threshold for line coverage at which cloverage will abort the build.
+    Ignored if --fail-threshold is non-zero. Default: 0%"
+    :default 0
+    :parse-fn #(Integer/parseInt %)]
+   [nil "--form-fail-threshold THRESHOLD"
+    "Sets the percentage threshold for form coverage at which cloverage will abort the build.
+    Ignored if --fail-threshold is non-zero. Default: 0%"
+    :default 0
+    :parse-fn #(Integer/parseInt %)]
+   [nil "--low-watermark PCT"
+    "Sets the low watermark percentage (valid values 0..100). Default: 50%"
+    :default 50
+    :parse-fn #(Integer/parseInt %)]
+   [nil "--high-watermark PCT"
+    "Sets the high watermark percentage (valid values 0..100). Default: 80%"
+    :default 80
+    :parse-fn #(Integer/parseInt %)]
+   ["-d" "--[no-]debug"
+    "Output debugging information to stdout." :default false]
+   ["-r" "--runner RUNNER"
+    "Specify which test runner to use. Built-in runners are `clojure.test`, `midje` and `eftest`."
+    :default :clojure.test
+    :parse-fn parse-kw-str]
+   [nil "--[no-]nop" "Instrument with noops." :default false]
+   ["-n" "--ns-regex REGEX"
+    "Regex for instrumented namespaces (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   ["-e" "--ns-exclude-regex REGEX"
+    "Regex for namespaces not to be instrumented (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   [nil "--exclude-call NAME"
+    "Name of fn/macro whose call sites are not to be instrumented (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   ["-t" "--test-ns-regex REGEX"
+    "Regex for test namespaces (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   ["-p" "--src-ns-path PATH"
+    "Path (string) to directory containing source code namespaces (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   ["-s" "--test-ns-path PATH"
+    "Path (string) to directory containing test namespaces (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   ["-x" "--extra-test-ns NS"
+    "Additional test namespace (string) to add (can be repeated)."
+    :default []
+    :multi true
+    :update-fn conj]
+   [nil "--selector SELECTOR"
+    "Apply test selector (can be repeated)"
+    :default []
+    :multi true
+    :parse-fn parse-kw-str
+    :update-fn conj]
+   ["-c" "--custom-report SYMBOL"
+    "Load and run a custom report writer. Should be a namespaced symbol. The function is passed
+    project-options args-map output-directory forms"
+    :parse-fn parse-sym-str]
+   ["-h" "--help" "Show help."]])
+
+(defn parse-args [args project-settings]
+  (let [{:keys [options arguments summary]} (cli/parse-opts args (arguments))]
+    (fix-opts [options arguments summary]
+              (doto project-settings validate!))))

@@ -1,0 +1,84 @@
+{% from "_macros.md.j2" import block, empty %}
+{% set components = m.of_type("ARCH", kind="component") %}
+{% set soup = m.of_type("SOUP") %}
+## Componenti (SW-TPL-04 §7.1)
+
+### Panoramica dei componenti di primo livello (§7.1.1–7.1.2)
+
+{% set top = [] %}
+{% for item in components if not (m.links_from(item, "derives_from") | selectattr("type", "equalto", "ARCH") | list) %}
+{% set _ = top.append(item) %}
+{% endfor %}
+{{ empty(top) }}
+{% if top %}
+| Componente | Titolo | Requisiti realizzati | Composto da |
+|---|---|---|---|
+{% for item in top %}
+| {{ item.id }} | {{ item.title | cell }} | {{ m.links_from(item, "derives_from") | selectattr("type", "equalto", "SRS") | list | ids }} | {{ m.links_to(item, "derives_from") | ids }} |
+{% endfor %}
+
+{% endif %}
+### SOUP (§7.1.3)
+
+{{ empty(soup) }}
+{% if soup %}
+| SOUP | Nome | Pacchetto | Produttore | Versione | Scopo | Anomalie valutate | Usato da |
+|---|---|---|---|---|---|---|---|
+{% for item in soup %}
+| {{ item.id }} | {{ item.title | cell }} | {{ item.fields.package | cell }} | {{ item.fields.manufacturer | cell }} | {{ item.fields.version | cell }} | {{ item.fields.purpose | cell }} | {{ item.fields.anomalies_evaluated | cell }} | {{ m.links_to(item, "uses") | ids }} |
+{% endfor %}
+
+{% endif %}
+### Descrizione dei componenti (§7.1.4)
+
+{{ empty(components) }}
+{% for item in components %}
+{{ block(item, 4, [
+    ("Requisiti realizzati", m.links_from(item, "derives_from") | selectattr("type", "equalto", "SRS") | list | ids),
+    ("Parte di", m.links_from(item, "derives_from") | selectattr("type", "equalto", "ARCH") | list | ids),
+    ("Composto da", m.links_to(item, "derives_from") | ids),
+    ("Usa", m.links_from(item, "uses") | ids),
+    ("Misura di controllo per", m.links_from(item, "mitigates") | ids),
+    ("Verificato da", m.links_to(item, "verifies") | ids),
+]) }}
+{% endfor %}
+{% for kind, title in [("interface", "Interfacce"), ("decision", "Decisioni architetturali")] %}
+## {{ title }}
+
+{% set selected = m.of_type("ARCH", kind=kind) %}
+{{ empty(selected) }}
+{% for item in selected %}
+{{ block(item, 3, [
+    ("Deriva da", m.links_from(item, "derives_from") | ids),
+    ("Misura di controllo per", m.links_from(item, "mitigates") | ids),
+]) }}
+{% endfor %}
+{% endfor %}
+## Design di dettaglio delle unità (SW-TPL-04 §7.2)
+
+{% set units = m.of_type("UNIT") %}
+{{ empty(units) }}
+{% for item in units %}
+{{ block(item, 3, [
+    ("Componente", m.links_from(item, "derives_from") | ids),
+    ("Codice", item.fields.paths),
+    ("Interfacce", item.fields.interfaces),
+    ("Usa", m.links_from(item, "uses") | ids),
+    ("Misura di controllo per", m.links_from(item, "mitigates") | ids),
+    ("Test di unità", m.links_to(item, "verifies", "TEST") | selectattr("fields.level", "equalto", "unit") | list | ids),
+]) }}
+{% endfor %}
+## Requisiti e anomalie dei SOUP
+
+{{ empty(soup) }}
+{% for item in soup %}
+{{ block(item, 3, [
+    ("Pacchetto", item.fields.package),
+    ("Produttore", item.fields.manufacturer),
+    ("Versione", item.fields.version),
+    ("Scopo", item.fields.purpose),
+    ("Requisiti", item.fields.requirements),
+    ("Anomalie note", item.fields.known_anomalies),
+    ("Anomalie valutate", item.fields.anomalies_evaluated),
+]) }}
+{% endfor %}
