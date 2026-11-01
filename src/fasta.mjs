@@ -4,6 +4,28 @@ function lineError(lineNumber, message) {
   return new Error(`Errore alla linea ${lineNumber}: ${message}`);
 }
 
+function parseHeader(line, lineNumber) {
+  const header = line.slice(1).trim();
+  const match = /^(\S+)(?:\s+(.*))?$/.exec(header);
+  if (!match) {
+    throw lineError(lineNumber, 'header FASTA senza identificativo.');
+  }
+
+  const [, id, description = ''] = match;
+  return { id, description, sequence: '', lineNumber };
+}
+
+function finishRecord(record) {
+  if (record.sequence.length === 0) {
+    throw lineError(
+      record.lineNumber,
+      `il record "${record.id}" non contiene una sequenza.`,
+    );
+  }
+
+  return { id: record.id, description: record.description, sequence: record.sequence };
+}
+
 export function parseFasta(text) {
   if (typeof text !== 'string') {
     throw new TypeError('Il testo FASTA deve essere una stringa.');
@@ -13,42 +35,22 @@ export function parseFasta(text) {
   const identifiers = new Set();
   let currentRecord = null;
 
-  const finishRecord = () => {
-    if (currentRecord.sequence.length === 0) {
-      throw lineError(
-        currentRecord.lineNumber,
-        `il record "${currentRecord.id}" non contiene una sequenza.`,
-      );
-    }
-
-    records.push({
-      id: currentRecord.id,
-      description: currentRecord.description,
-      sequence: currentRecord.sequence,
-    });
-  };
-
   const lines = text.split(/\r\n|\n/);
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     const lineNumber = index + 1;
 
     if (line.startsWith('>')) {
-      if (currentRecord !== null) finishRecord();
+      if (currentRecord !== null) records.push(finishRecord(currentRecord));
 
-      const header = line.slice(1).trim();
-      const match = /^(\S+)(?:\s+(.*))?$/.exec(header);
-      if (!match) {
-        throw lineError(lineNumber, 'header FASTA senza identificativo.');
-      }
-
-      const [, id, description = ''] = match;
+      const nextRecord = parseHeader(line, lineNumber);
+      const { id } = nextRecord;
       if (identifiers.has(id)) {
         throw lineError(lineNumber, `identificativo duplicato "${id}".`);
       }
 
       identifiers.add(id);
-      currentRecord = { id, description, sequence: '', lineNumber };
+      currentRecord = nextRecord;
       continue;
     }
 
@@ -67,6 +69,6 @@ export function parseFasta(text) {
     currentRecord.sequence += line;
   }
 
-  if (currentRecord !== null) finishRecord();
+  if (currentRecord !== null) records.push(finishRecord(currentRecord));
   return records;
 }

@@ -28,4 +28,11 @@ test('parseFasta reports line numbers for malformed input [TEST-0007]', () => {
   assert.throws(() => parseFasta('>empty\n\n>next\nA'), /linea 1/i);
   assert.throws(() => parseFasta('>sample\nA\n>sample\nC'), /linea 3/i);
   assert.throws(() => parseFasta('>sample\nAC?'), /linea 2/i);
+  assert.throws(() => parseFasta('>sample\nAC\n>empty\n\n'), /linea 3/i);
+  assert.throws(() => parseFasta('>sample\nAC\n> \n'), /linea 3/i);
+  assert.throws(() => parseFasta('\r\n>sample\r\nAC\r\nT?'), /linea 4.*\?.*posizione 2/i);
+  assert.throws(() => parseFasta('>sample\nAC GT'), /linea 2.*posizione 3/i);
+  for (const text of [null, undefined, 42, ['>sample', 'AC']]) {
+    assert.throws(() => parseFasta(text), TypeError);
+  }
 });
