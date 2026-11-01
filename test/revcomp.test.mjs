@@ -6,6 +6,7 @@ import { reverseComplement } from '../src/revcomp.mjs';
 test('reverse complement reverses, complements, and preserves letter case [TEST-0004]', () => {
   assert.equal(reverseComplement('ACGTN'), 'NACGT');
   assert.equal(reverseComplement('aCgTn'), 'nAcGt');
+  assert.equal(reverseComplement('AaCcGgTtNn'), 'nNaAcCgGtT');
   assert.equal(reverseComplement(''), '');
 });
 
