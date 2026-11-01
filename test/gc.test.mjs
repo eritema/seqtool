@@ -19,4 +19,10 @@ test('DNA validation rejects invalid characters and reports their position [TEST
   assert.equal(validateDnaSequence('acgtnN'), 'ACGTNN');
   assert.throws(() => validateDnaSequence('acXgt'), /X.*posizione 3/i);
   assert.throws(() => gcContent('acXgt'), /X.*posizione 3/i);
+  assert.throws(() => gcContent('ACGT!'), /!.*posizione 5/i);
+  assert.throws(() => gcContent('NN?'), /\?.*posizione 3/i);
+  for (const seq of [null, undefined, 42, ['A', 'C'], { length: 2 }]) {
+    assert.throws(() => validateDnaSequence(seq), TypeError);
+    assert.throws(() => gcContent(seq), TypeError);
+  }
 });
