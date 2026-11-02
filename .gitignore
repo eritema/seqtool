@@ -4,3 +4,5 @@ reports/
 .swarmforge/
 .worktrees/
 ci-evidence/
+**/.DS_Store
+export/
