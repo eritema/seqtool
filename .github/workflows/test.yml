@@ -1,0 +1,15 @@
+name: test
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: mkdir -p reports && node --test --test-reporter=junit --test-reporter-destination=reports/junit.xml test/*.test.mjs
+      - run: swarmforge/tool-kits/hammer/tools/hammer/run evidence import reports/junit.xml --format junit --ci --out cq-evidence.json
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: cq-evidence, path: cq-evidence.json}
