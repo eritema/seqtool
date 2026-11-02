@@ -1,0 +1,402 @@
+{
+  "commit": "b64263d6d6e8e2765bc0c739ee665282dd6b9058",
+  "created": "2026-11-02 14:51:45Z",
+  "evidence": [
+    {
+      "attachments": [],
+      "created": "2026-11-02T14:51:00Z",
+      "file": "cq/evidence/v0.1/cq-evidence.json",
+      "origin": "ci",
+      "sha256": "4ee3f4da36663efb8ec395669d460ce13363bc02f414c5447db7b843144518f0",
+      "url": "https://github.com/eritema/seqtool/actions/runs/41465839885"
+    }
+  ],
+  "findings": [
+    {
+      "code": "release-not-approved",
+      "item": "ARCH-0001",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "ARCH-0002",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "ARCH-0003",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "ARCH-0004",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "RISK-0001",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "RISK-0002",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "RISK-0003",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "SRS-0001",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "SRS-0002",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "SRS-0003",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "SRS-0004",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "SRS-0005",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "SRS-0006",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0001",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0002",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0003",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0004",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0005",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0006",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "TEST-0007",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "UNIT-0001",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "UNIT-0002",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "UNIT-0003",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "UNIT-0004",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "not-covered",
+      "item": "URS-0001",
+      "message": "manca validates",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "URS-0001",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "not-covered",
+      "item": "URS-0002",
+      "message": "manca validates",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "URS-0002",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    },
+    {
+      "code": "not-covered",
+      "item": "URS-0003",
+      "message": "manca validates",
+      "severity": "warning"
+    },
+    {
+      "code": "release-not-approved",
+      "item": "URS-0003",
+      "message": "stato draft, non approved",
+      "severity": "warning"
+    }
+  ],
+  "format_version": 1,
+  "hammer_version": "0.1.0",
+  "items": {
+    "ARCH-0001": {
+      "fingerprint": "ced6f83ad816",
+      "status": "draft",
+      "title": "Calcolo della frazione GC",
+      "type": "ARCH"
+    },
+    "ARCH-0002": {
+      "fingerprint": "dc1375c41b75",
+      "status": "draft",
+      "title": "Validazione riusabile delle sequenze DNA",
+      "type": "ARCH"
+    },
+    "ARCH-0003": {
+      "fingerprint": "5d5530ec258d",
+      "status": "draft",
+      "title": "Calcolo del complemento inverso",
+      "type": "ARCH"
+    },
+    "ARCH-0004": {
+      "fingerprint": "a5516d672832",
+      "status": "draft",
+      "title": "Parsing puro dei record FASTA",
+      "type": "ARCH"
+    },
+    "RISK-0001": {
+      "fingerprint": "c2cc59e6ce2b",
+      "status": "draft",
+      "title": "Frazione GC errata usata nella valutazione del campione",
+      "type": "RISK"
+    },
+    "RISK-0002": {
+      "fingerprint": "7a66bbc0031b",
+      "status": "draft",
+      "title": "Base non valida copiata nel primer reverse-complemented",
+      "type": "RISK"
+    },
+    "RISK-0003": {
+      "fingerprint": "f6077c514457",
+      "status": "draft",
+      "title": "Sequenze FASTA associate al campione sbagliato",
+      "type": "RISK"
+    },
+    "SRS-0001": {
+      "fingerprint": "08665720eed5",
+      "status": "draft",
+      "title": "Calcolare la frazione GC escludendo le basi ambigue",
+      "type": "SRS"
+    },
+    "SRS-0002": {
+      "fingerprint": "14785198621e",
+      "status": "draft",
+      "title": "Rifiutare sequenze senza basi valutabili o con caratteri non validi",
+      "type": "SRS"
+    },
+    "SRS-0003": {
+      "fingerprint": "047f93495c93",
+      "status": "draft",
+      "title": "Calcolare il complemento inverso conservando l’uso delle maiuscole",
+      "type": "SRS"
+    },
+    "SRS-0004": {
+      "fingerprint": "fea9968f9354",
+      "status": "draft",
+      "title": "Rifiutare basi non valide nel complemento inverso",
+      "type": "SRS"
+    },
+    "SRS-0005": {
+      "fingerprint": "11ea83f97e38",
+      "status": "draft",
+      "title": "Leggere record FASTA con identificativi e sequenze separate",
+      "type": "SRS"
+    },
+    "SRS-0006": {
+      "fingerprint": "215b644f802f",
+      "status": "draft",
+      "title": "Rifiutare record FASTA malformati con la riga dell’errore",
+      "type": "SRS"
+    },
+    "TEST-0001": {
+      "fingerprint": "c778f6e06a39",
+      "status": "draft",
+      "title": "GC usa le sole basi informative e produce la frazione attesa",
+      "type": "TEST"
+    },
+    "TEST-0002": {
+      "fingerprint": "1af3fb97e1da",
+      "status": "draft",
+      "title": "GC rifiuta sequenze senza basi informative",
+      "type": "TEST"
+    },
+    "TEST-0003": {
+      "fingerprint": "dde657ec0f8c",
+      "status": "draft",
+      "title": "La validazione rifiuta una base non valida con posizione",
+      "type": "TEST"
+    },
+    "TEST-0004": {
+      "fingerprint": "07a030264d11",
+      "status": "draft",
+      "title": "Il complemento inverso restituisce basi opposte in ordine inverso e conserva il caso",
+      "type": "TEST"
+    },
+    "TEST-0005": {
+      "fingerprint": "7b136a807ed0",
+      "status": "draft",
+      "title": "Il complemento inverso rifiuta basi non valide senza risultato parziale",
+      "type": "TEST"
+    },
+    "TEST-0006": {
+      "fingerprint": "1f0b0f275497",
+      "status": "draft",
+      "title": "FASTA mantiene ogni sequenza associata al proprio identificativo",
+      "type": "TEST"
+    },
+    "TEST-0007": {
+      "fingerprint": "95759b8b9e9e",
+      "status": "draft",
+      "title": "FASTA rifiuta record malformati indicando la riga",
+      "type": "TEST"
+    },
+    "UNIT-0001": {
+      "fingerprint": "34c79ced52f2",
+      "status": "draft",
+      "title": "Funzione gcContent",
+      "type": "UNIT"
+    },
+    "UNIT-0002": {
+      "fingerprint": "006aacfcff1b",
+      "status": "draft",
+      "title": "Validatore riusabile di sequenze DNA",
+      "type": "UNIT"
+    },
+    "UNIT-0003": {
+      "fingerprint": "670620709963",
+      "status": "draft",
+      "title": "Funzione reverseComplement",
+      "type": "UNIT"
+    },
+    "UNIT-0004": {
+      "fingerprint": "5147084407c2",
+      "status": "draft",
+      "title": "Funzione parseFasta",
+      "type": "UNIT"
+    },
+    "URS-0001": {
+      "fingerprint": "73e588b8b6f4",
+      "status": "draft",
+      "title": "Calcolare il contenuto GC di una sequenza",
+      "type": "URS"
+    },
+    "URS-0002": {
+      "fingerprint": "b30c2c19739f",
+      "status": "draft",
+      "title": "Ottenere il complemento inverso di una sequenza",
+      "type": "URS"
+    },
+    "URS-0003": {
+      "fingerprint": "050d4e9ebf15",
+      "status": "draft",
+      "title": "Leggere un file FASTA con più sequenze",
+      "type": "URS"
+    }
+  },
+  "name": "v0.1",
+  "project": "seqtools",
+  "results": {
+    "TEST-0001": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    },
+    "TEST-0002": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    },
+    "TEST-0003": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    },
+    "TEST-0004": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    },
+    "TEST-0005": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    },
+    "TEST-0006": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    },
+    "TEST-0007": {
+      "evidence": "cq-evidence.json",
+      "origin": "ci",
+      "result": "pass"
+    }
+  },
+  "safety_class": "C"
+}
