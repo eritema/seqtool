@@ -29,4 +29,6 @@
   `hammer audit --base BASE --update ESITO`. Findings non vuoti vanno corretti.
 - Link sospetti: rivedere l'elemento collegato e solo dopo `hammer review ID`.
 - Baseline, export di rilascio ed evidenze CI sono dell'operatore.
+- ARCH derives_from ARCH solo per un sottocomponente. Il riuso di un modulo si
+  esprime con i link della UNIT condivisa, non fra ARCH.
 
